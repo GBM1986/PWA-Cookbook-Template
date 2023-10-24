@@ -12,7 +12,7 @@ const assets = [
 //Registerer service worker
 
 if('serviceWorker' in navigator) {
-	navigator.serviceWorker.register('./sw.js')
+	navigator.serviceWorker.register('./sw2.js')
 	.then(reg => console.log('service worker registered', reg))
 	.catch(err => console.error('service worker not registered', err)) 
 }
@@ -52,7 +52,7 @@ self.addEventListener('fetch', event => {
                     return caches.open(dynamicCacheName).then(cache => {
                         cache.put(event.request.url, fetchRes.clone())
 
-                        return fetchRes;
+                        return fetchRes
                     })
                 })
             )
