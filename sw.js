@@ -45,3 +45,15 @@ self.addEventListener('fetch', event => {
 		})
 	)
 })
+
+// Limit Funktion
+// Funktion til styring af antal filer i en given cache
+const limitCacheSize = (cacheName, numberOfAllowedFiles) => {
+    caches.open(cacheName).then(cache => {
+        cache.keys().then(keys=> {
+            if(keys.length > numberOfAllowedFiles) {
+                cache.delete(keys[0]).then(limitCacheSize(cacheName,numberOfAllowedFiles))
+            }
+        })
+    })
+}
