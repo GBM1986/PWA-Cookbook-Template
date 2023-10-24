@@ -21,8 +21,12 @@ self.addEventListener('install', event => {
 self.addEventListener('activate', event => {
 	console.log('Service Worker has been activated');
 
-    caches.keys().then(keys => {
-        
-    })
+    event.waitUntil()
+        caches.keys().then(keys => {
+            const filteredkeys = keys.filter(key => key !== staticCacheName)
+            filteredkeys.map(key => {
+                caches.delete(key)
+            })
+        })
 })
 
