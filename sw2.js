@@ -1,5 +1,5 @@
 // Var med navn på statsik cache
-const staticCacheName = "stite-static-v1.0";
+const staticCacheName = "stite-static-v1.1";
 
 const dynamicCacheName = 'site-dynamic-v1.0'
 // Array med filer
