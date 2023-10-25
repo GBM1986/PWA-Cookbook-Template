@@ -1,10 +1,10 @@
 const staticCacheName = 'site-static-v1.2'
 
 const assets = [
-    "/",
-    "/index.html",
-    "/css/styles.css",
-    "/fallback.html"
+    "./",
+    "./index.html",
+    "./css/styles.css",
+    "./fallback.html"
 ]
 
 // Install Service Worker
