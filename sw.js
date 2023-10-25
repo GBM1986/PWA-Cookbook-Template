@@ -19,17 +19,24 @@ self.addEventListener('install', event => {
 })
 
 //Install Service Worker
-self.addEventListener('activate', event => {
-    console.log('Service Worker has been activated');
-
-    event.waitUntil(
-        caches.keys().then(keys => {
-            const filteredKeys = keys.filter(key => key !== staticCacheName);
-            const deletePromises = filteredKeys.map(key => caches.delete(key));
-            return Promise.all(deletePromises);
+self.addEventListener('fetch', event => {
+    event.respondWith(
+        caches.match(event.request).then(cacheResult => {
+            return cacheResult || fetch(event.request)
+                .then(fetchRes => {
+                    if (!fetchRes || fetchRes.status !== 200) {
+                        throw new Error('Network error');
+                    }
+                    caches.open(dynamicCacheName).then(cache => {
+                        cache.put(event.request, fetchRes.clone());
+                    });
+                    return fetchRes;
+                })
+                .catch(() => caches.match('/fallback.html'));
         })
     );
 });
+
 
 
 const dynamicCacheName = 'site-dynamic-v1'
