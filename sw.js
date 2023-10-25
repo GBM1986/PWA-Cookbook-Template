@@ -3,7 +3,8 @@ const staticCacheName = 'site-static-v1.2'
 const assets = [
     "/",
     "/index.html",
-    "/css/styles.css"
+    "/css/styles.css",
+    "/fallback.html"
 ]
 
 // Install Service Worker
@@ -54,7 +55,10 @@ const limitCacheSize = (cacheName, numberOfAllowedFiles) => {
             if(keys.length > numberOfAllowedFiles) {
                 cache.delete(keys[0]).then(limitCacheSize(cacheName,numberOfAllowedFiles))
             }
-        })
+        }).catch(() => {
+			// Hvis ovenstående giver fejl kaldes fallback siden			
+			return caches.match('/fallback.html')
+		})
     })
 }
 
