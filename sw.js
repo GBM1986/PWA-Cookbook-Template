@@ -3,8 +3,7 @@ const staticCacheName = 'site-static-v1.2'
 const assets = [
     "/",
     "/index.html",
-    "/css/styles.css",
-    "/fallback.html"
+    "/css/styles.css"
 ]
 
 // Install Service Worker
@@ -35,25 +34,16 @@ self.addEventListener('activate', event => {
 const dynamicCacheName = 'site-dynamic-v1'
 
 self.addEventListener('fetch', event => {
-    if(!(event.request.url.indexOf('http') === 0)) return
-
-    event.respondwith(
-        caches.match(event.request).then(cacheResult => {
-            return (
-                cacheResult || 
-                fetch(event.request).then(async fetchRes => {
-                    return caches.open(dynamicCacheName).then(cache => {
-                        cache.put(event.request.url, fetchRes.clone())
-
-                        return fetchRes
-                    })
-                })
-            )
-        }).catch(() => {
-			// Hvis ovenstående giver fejl kaldes fallback siden			
-			return caches.match('/fallback.html')
+	event.respondWith(
+		caches.match(event.request).then(cacheRes => {
+			return cacheRes || fetch(event.request).then(fetchRes => {
+				return caches.open(dynamicCacheName).then(cache => {
+					cache.put(event.request.url, fetchRes.clone())
+					return fetchRes
+				})
+			})
 		})
-    )
+	)
 })
 
 // Limit Funktion
@@ -68,4 +58,4 @@ const limitCacheSize = (cacheName, numberOfAllowedFiles) => {
     })
 }
 
-limitCacheSize(dynamicCacheName, 5)
+limitCacheSize(dynamicCacheName, 8)
