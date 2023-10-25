@@ -4,7 +4,7 @@ const assets = [
     "/",
     "/index.html",
     "/css/styles.css",
-    "/fallback.html"
+    "/pages/fallback.html"
 ]
 
 // Install Service Worker
@@ -45,7 +45,7 @@ self.addEventListener('fetch', event => {
 			})
 		}).catch(() => {
 			// Hvis ovenstående giver fejl kaldes fallback siden			
-			return caches.match('/fallback.html')
+			return caches.match('/pages/fallback.html')
 		})
 	)
 })
