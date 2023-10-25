@@ -35,16 +35,25 @@ self.addEventListener('activate', event => {
 const dynamicCacheName = 'site-dynamic-v1'
 
 self.addEventListener('fetch', event => {
-	event.respondWith(
-		caches.match(event.request).then(cacheRes => {
-			return cacheRes || fetch(event.request).then(fetchRes => {
-				return caches.open(dynamicCacheName).then(cache => {
-					cache.put(event.request.url, fetchRes.clone())
-					return fetchRes
-				})
-			})
+    if(!(event.request.url.indexOf('http') === 0)) return
+
+    event.respondwith(
+        caches.match(event.request).then(cacheResult => {
+            return (
+                cacheResult || 
+                fetch(event.request).then(async fetchRes => {
+                    return caches.open(dynamicCacheName).then(cache => {
+                        cache.put(event.request.url, fetchRes.clone())
+
+                        return fetchRes
+                    })
+                })
+            )
+        }).catch(() => {
+			// Hvis ovenstående giver fejl kaldes fallback siden			
+			return caches.match('/fallback.html')
 		})
-	)
+    )
 })
 
 // Limit Funktion
@@ -55,10 +64,7 @@ const limitCacheSize = (cacheName, numberOfAllowedFiles) => {
             if(keys.length > numberOfAllowedFiles) {
                 cache.delete(keys[0]).then(limitCacheSize(cacheName,numberOfAllowedFiles))
             }
-        }).catch(() => {
-			// Hvis ovenstående giver fejl kaldes fallback siden			
-			return caches.match('/fallback.html')
-		})
+        })
     })
 }
 
