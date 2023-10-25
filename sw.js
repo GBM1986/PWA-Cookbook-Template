@@ -1,4 +1,4 @@
-// const staticCacheName = 'site-static-v1.2'
+const staticCacheName = 'site-static-v1.2'
 
 const assets = [
     "/",
@@ -57,3 +57,5 @@ const limitCacheSize = (cacheName, numberOfAllowedFiles) => {
         })
     })
 }
+
+limitCacheSize(dynamicCacheName, 2)
