@@ -19,16 +19,16 @@ self.addEventListener('install', event => {
 
 //Install Service Worker
 self.addEventListener('activate', event => {
-	console.log('Service Worker has been activated');
+    console.log('Service Worker has been activated');
 
-    event.waitUntil()
+    event.waitUntil(
         caches.keys().then(keys => {
-            const filteredkeys = keys.filter(key => key !== staticCacheName)
-            filteredkeys.map(key => {
-                caches.delete(key)
-            })
+            const filteredKeys = keys.filter(key => key !== staticCacheName);
+            const deletePromises = filteredKeys.map(key => caches.delete(key));
+            return Promise.all(deletePromises);
         })
-})
+    );
+});
 
 
 const dynamicCacheName = 'site-dynamic-v1'
@@ -58,4 +58,4 @@ const limitCacheSize = (cacheName, numberOfAllowedFiles) => {
     })
 }
 
-limitCacheSize(dynamicCacheName, 2)
+limitCacheSize(dynamicCacheName, 5)
