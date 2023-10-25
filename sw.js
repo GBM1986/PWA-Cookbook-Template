@@ -58,4 +58,4 @@ const limitCacheSize = (cacheName, numberOfAllowedFiles) => {
     })
 }
 
-limitCacheSize(dynamicCacheName, 5)
+limitCacheSize(dynamicCacheName, 2)
