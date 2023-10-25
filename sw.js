@@ -3,7 +3,8 @@ const staticCacheName = 'site-static-v1.2'
 const assets = [
     "/",
     "/index.html",
-    "/css/styles.css"
+    "/css/styles.css",
+    "/fallback.html"
 ]
 
 // Install Service Worker
@@ -19,16 +20,16 @@ self.addEventListener('install', event => {
 
 //Install Service Worker
 self.addEventListener('activate', event => {
-    console.log('Service Worker has been activated');
+	console.log('Service Worker has been activated');
 
-    event.waitUntil(
+    event.waitUntil()
         caches.keys().then(keys => {
-            const filteredKeys = keys.filter(key => key !== staticCacheName);
-            const deletePromises = filteredKeys.map(key => caches.delete(key));
-            return Promise.all(deletePromises);
+            const filteredkeys = keys.filter(key => key !== staticCacheName)
+            filteredkeys.map(key => {
+                caches.delete(key)
+            })
         })
-    );
-});
+})
 
 
 const dynamicCacheName = 'site-dynamic-v1'
@@ -58,4 +59,4 @@ const limitCacheSize = (cacheName, numberOfAllowedFiles) => {
     })
 }
 
-limitCacheSize(dynamicCacheName, 8)
+limitCacheSize(dynamicCacheName, 20)
