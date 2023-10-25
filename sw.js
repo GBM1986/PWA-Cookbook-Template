@@ -35,26 +35,27 @@ self.addEventListener('activate', event => {
 const dynamicCacheName = 'site-dynamic-v1'
 
 self.addEventListener('fetch', event => {
-    if(!(event.request.url.indexOf('http') === 0)) return
+    if (!(event.request.url.indexOf('http') === 0)) return;
 
-    event.respondwith(
+    event.respondWith(
         caches.match(event.request).then(cacheResult => {
             return (
-                cacheResult || 
+                cacheResult ||
                 fetch(event.request).then(async fetchRes => {
                     return caches.open(dynamicCacheName).then(cache => {
-                        cache.put(event.request.url, fetchRes.clone())
+                        cache.put(event.request.url, fetchRes.clone());
 
-                        return fetchRes
-                    })
+                        return fetchRes;
+                    });
                 })
-            )
+            );
         }).catch(() => {
-			// Hvis ovenstående giver fejl kaldes fallback siden			
-			return caches.match('/fallback.html')
-		})
-    )
-})
+            // If the above code fails, serve the fallback page.
+            return caches.match('/fallback.html');
+        })
+    );
+});
+
 
 // Limit Funktion
 // Funktion til styring af antal filer i en given cache
