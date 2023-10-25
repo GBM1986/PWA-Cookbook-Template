@@ -43,6 +43,9 @@ self.addEventListener('fetch', event => {
 					return fetchRes
 				})
 			})
+		}).catch(() => {
+			// Hvis ovenstående giver fejl kaldes fallback siden			
+			return caches.match('/pages/fallback.html')
 		})
 	)
 })
